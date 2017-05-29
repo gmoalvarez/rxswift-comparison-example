@@ -9,6 +9,7 @@ import UIKit
 // Can't consecutively ski twice (disable)
 // Can only do 5 activities (hide)
 
+//NEW RULE: If you start the day with a beer, can't do anything else besides drink beer. (disable)
 struct Emoji {
   static let beer = "🍺"
   static let surf = "🏄"
@@ -23,9 +24,9 @@ class NormalViewController: UIViewController {
   @IBOutlet weak var surfButton: UIButton!
   @IBOutlet weak var beerButton: UIButton!
   @IBOutlet weak var carButton: UIButton!
-
   @IBOutlet weak var activityTableView: UITableView!
 
+  // MARK: Actions
   @IBAction func clearButtonPressed(_ sender: Any) {
     activities.removeAll()
     resetButtons()
@@ -40,19 +41,21 @@ class NormalViewController: UIViewController {
     updateButtonState()
   }
 
+  // MARK: Model
   var activities: [String] = []
 
+  // MARK: Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
     activityTableView.dataSource = self
     activityTableView.delegate = self
   }
 
-  func appendActivity(_ activity: String) {
+  // MARK: Private methods
+  private func appendActivity(_ activity: String) {
     activities.append(activity)
     activityTableView.reloadData()
   }
-
 
   /// This method makes sure the correct buttons are enabled or disabled
   private func updateButtonState() {
@@ -67,6 +70,7 @@ class NormalViewController: UIViewController {
     if beerCount > 3 { skiButton.isHidden = true }
 
     guard let lastActivity = activities.last else { return }
+    guard let firstActivity = activities.first else { return }
 
     if lastActivity == Emoji.surf {
       surfButton.isEnabled = false
@@ -93,6 +97,13 @@ class NormalViewController: UIViewController {
       beerButton.isEnabled = false
       carButton.isEnabled = false
     }
+
+    if firstActivity == Emoji.beer {
+      surfButton.isEnabled = false
+      skiButton.isEnabled = false
+      carButton.isEnabled = false
+    }
+
   }
 
   private func resetButtons() {
@@ -105,6 +116,7 @@ class NormalViewController: UIViewController {
     beerButton.isHidden = false
     carButton.isHidden = false
   }
+
 }
 
 extension NormalViewController: UITableViewDataSource {

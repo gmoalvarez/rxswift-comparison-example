@@ -40,6 +40,7 @@ class RxSwiftViewController: UIViewController {
 
     /// We will use these below so it makes it easy to have them handy.
     let lastActivity = activities.map { $0.last }
+    let firstActivity = activities.map { $0.first }
     let activityCount = activities.map { $0.count }
     // MARK: Button Bindings
 
@@ -55,8 +56,8 @@ class RxSwiftViewController: UIViewController {
     
     // isEnabled: Enable when the last activity is not skiing or surfing.
 
-    lastActivity
-      .map { $0 != Emoji.surf && $0 != Emoji.ski }
+    Observable.combineLatest(lastActivity, firstActivity)
+      { $1 != Emoji.beer || $0 != Emoji.surf && $0 != Emoji.ski || $0 == Emoji.car }
       .bind(to: skiButton.rx.isEnabled)
       .disposed(by: bag)
 
