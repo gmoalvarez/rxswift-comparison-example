@@ -3,11 +3,14 @@ import UIKit
 // If you drink more than one beer, you can't drive (hide car).
 // If you drink more than two beers, you shouldn't surf (hide surf).
 // If you drink more than three beers, you shouldn't ski (hide ski).
-// If you ski or surf, you need to drive before you can do the other (enable or disable).
 // Can't drink more than four beers (hide)
 // Can't consecutively surf twice (disable)
 // Can't consecutively ski twice (disable)
 // Can only do 5 activities (hide)
+
+/// New rules....
+// 1): If you drink beer first thing, then you can only drink more beer. (disable)
+// 2): If you ski or surf, you need to drive before you can do the other (enable or disable).
 
 struct Emoji {
   static let beer = "🍺"
@@ -33,6 +36,7 @@ class NormalViewController: UIViewController {
   }
 
   @IBAction func activityButtonPressed(_ sender: UIButton) {
+
     guard let activity = sender.titleLabel?.text else { return }
 
     appendActivity(activity)
@@ -60,27 +64,29 @@ class NormalViewController: UIViewController {
 
     let beerCount = activities.filter { $0 == Emoji.beer }.count
 
+		guard let lastActivity = activities.last else { return }
+		guard let firstActivity = activities.first else { return }
+
+		if firstActivity == Emoji.beer {
+			surfButton.isHidden = true
+			skiButton.isHidden = true
+			carButton.isHidden = true
+		}
+
     if beerCount > 1 { carButton.isHidden = true }
 
     if beerCount > 2 { surfButton.isHidden = true }
 
     if beerCount > 3 { skiButton.isHidden = true }
 
-    guard let lastActivity = activities.last else { return }
+
 
     if lastActivity == Emoji.surf {
       surfButton.isEnabled = false
-      skiButton.isEnabled = false
     }
 
     if lastActivity == Emoji.ski {
       skiButton.isEnabled = false
-      surfButton.isEnabled = false
-    }
-
-    if lastActivity == Emoji.car {
-      skiButton.isEnabled = true
-      surfButton.isEnabled = true
     }
 
     if beerCount > 3 {

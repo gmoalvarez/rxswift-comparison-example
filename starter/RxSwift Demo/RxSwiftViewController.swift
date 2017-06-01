@@ -5,11 +5,14 @@ import RxCocoa
 // If you drink more than one beer, you can't drive (hide car).
 // If you drink more than two beers, you shouldn't surf (hide surf).
 // If you drink more than three beers, you shouldn't ski (hide ski).
-// If you ski or surf, you need to drive before you can do the other (enable or disable).
 // Can't drink more than four beers (hide)
 // Can't consecutively surf twice (disable)
 // Can't consecutively ski twice (disable)
 // Can only do 5 activities (hide)
+
+/// New rules....
+// 1): If you drink beer first thing, then you can only drink more beer. (disable)
+// 2): If you ski or surf, you need to drive before you can do the other (enable or disable).
 
 class RxSwiftViewController: UIViewController {
   fileprivate let bag = DisposeBag()
@@ -27,6 +30,7 @@ class RxSwiftViewController: UIViewController {
     return _activities.asObservable()
   }
 
+	// Maybe you need to use beer count somewhere else in the View Controller... see end of file
   var beerCount: Observable<Int> {
     return activities.map { activities -> Int in
       return activities.filter { $0 == Emoji.beer }.count
@@ -36,7 +40,6 @@ class RxSwiftViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     printObservables()
-
 
     /// We will use these below so it makes it easy to have them handy.
     let lastActivity = activities.map { $0.last }
@@ -52,8 +55,8 @@ class RxSwiftViewController: UIViewController {
       .bind(to: skiButton.rx.isHidden)
       .disposed(by: bag)
 
-    
-    // isEnabled: Enable when the last activity is not skiing or surfing.
+
+    // isEnabled: Enable when the last activity is not skiing.
 
     lastActivity
       .map { $0 != Emoji.surf && $0 != Emoji.ski }
@@ -63,9 +66,16 @@ class RxSwiftViewController: UIViewController {
     // Surf 🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄
 
     // isHidden: Hide when we have 5 activities or 3 beers
-
-
-    // isEnabled: Enable when last activity is not skiing or surfing
+		Observable.combineLatest(activityCount, beerCount) {
+			$0 >= 5 || $1 >= 3
+		}
+		.bind(to: surfButton.rx.isHidden)
+		.disposed(by: bag)
+    // isEnabled: Enable when last activity is not surfing
+		lastActivity
+			.map { $0 != Emoji.surf }
+			.bind(to: surfButton.rx.isEnabled)
+			.disposed(by: bag)
 
     // Beer 🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺
 

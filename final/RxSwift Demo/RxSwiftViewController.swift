@@ -11,6 +11,7 @@ import RxCocoa
 // Can't consecutively ski twice (disable)
 // Can only do 5 activities (hide)
 
+//NEW RULE: If you ski or surf, you need to drive before you can do the other (enable or disable).
 class RxSwiftViewController: UIViewController {
   fileprivate let bag = DisposeBag()
 
@@ -37,48 +38,58 @@ class RxSwiftViewController: UIViewController {
     super.viewDidLoad()
     printObservables()
 
-
     /// We will use these below so it makes it easy to have them handy.
     let lastActivity = activities.map { $0.last }
     let firstActivity = activities.map { $0.first }
     let activityCount = activities.map { $0.count }
     // MARK: Button Bindings
 
-    // Ski ⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷
+    // Ski ⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷ //
 
     // isHidden: Hide when we have 5 activities or 4 beers.
-
     Observable
       .combineLatest(activityCount, beerCount ) { $0 >= 5 && $1 >= 4 }
       .bind(to: skiButton.rx.isHidden)
       .disposed(by: bag)
 
     
-    // isEnabled: Enable when the last activity is not skiing or surfing.
-
+    // isEnabled: Enable when the last activity is not skiing and first is not beer.
     Observable.combineLatest(lastActivity, firstActivity)
-      { $1 != Emoji.beer || $0 != Emoji.surf && $0 != Emoji.ski || $0 == Emoji.car }
+      { $0 != Emoji.ski && $1 != Emoji.beer}
       .bind(to: skiButton.rx.isEnabled)
       .disposed(by: bag)
 
-    // Surf 🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄
+    // Surf 🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄 //
 
     // isHidden: Hide when we have 5 activities or 3 beers
+    Observable
+      .combineLatest(activityCount, beerCount ) { $0 >= 5 && $1 >= 3 }
+      .bind(to: surfButton.rx.isHidden)
+      .disposed(by: bag)
 
+    // isEnabled: Enable when last activity is not surfing
+    Observable.combineLatest(lastActivity, firstActivity)
+    { $0 != Emoji.surf && $1 != Emoji.beer }
+      .bind(to: surfButton.rx.isEnabled)
+      .disposed(by: bag)
 
-    // isEnabled: Enable when last activity is not skiing or surfing
-
-    // Beer 🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺
+    // Beer 🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺 //
 
     // isHidden: Hide when we drink 4 beers or 5 activities
-
+    Observable
+      .combineLatest(activityCount, beerCount ) { $0 >= 5 && $1 >= 4 }
+      .bind(to: beerButton.rx.isHidden)
+      .disposed(by: bag)
 
     // isEnabled: -------------
 
-    // Car 🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗
+    // Car 🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗🚗 //
 
     // isHidden: Hide when you drink 2 or more beers
-
+    Observable
+      .combineLatest(activityCount, beerCount ) { $0 >= 5 && $1 >= 2 }
+      .bind(to: carButton.rx.isHidden)
+      .disposed(by: bag)
 
     // isEnabled: -------------
 
@@ -126,7 +137,6 @@ extension RxSwiftViewController {
         self._activities.value.removeAll()
       })
       .disposed(by: bag)
-
   }
 }
 

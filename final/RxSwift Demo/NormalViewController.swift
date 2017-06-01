@@ -3,13 +3,14 @@ import UIKit
 // If you drink more than one beer, you can't drive (hide car).
 // If you drink more than two beers, you shouldn't surf (hide surf).
 // If you drink more than three beers, you shouldn't ski (hide ski).
-// If you ski or surf, you need to drive before you can do the other (enable or disable).
 // Can't drink more than four beers (hide)
 // Can't consecutively surf twice (disable)
 // Can't consecutively ski twice (disable)
 // Can only do 5 activities (hide)
 
-//NEW RULE: If you start the day with a beer, can't do anything else besides drink beer. (disable)
+// NEW RULE: If you drink beer first thing, then you can only drink more beer. (disable)
+// NEW RULE: If you ski or surf, you need to drive before you can do the other (enable or disable).
+
 struct Emoji {
   static let beer = "🍺"
   static let surf = "🏄"
@@ -60,8 +61,10 @@ class NormalViewController: UIViewController {
   /// This method makes sure the correct buttons are enabled or disabled
   private func updateButtonState() {
     let activityCount = activities.count
-
     let beerCount = activities.filter { $0 == Emoji.beer }.count
+
+    guard let lastActivity = activities.last else { return }
+    guard let firstActivity = activities.first else { return }
 
     if beerCount > 1 { carButton.isHidden = true }
 
@@ -69,22 +72,12 @@ class NormalViewController: UIViewController {
 
     if beerCount > 3 { skiButton.isHidden = true }
 
-    guard let lastActivity = activities.last else { return }
-    guard let firstActivity = activities.first else { return }
-
     if lastActivity == Emoji.surf {
       surfButton.isEnabled = false
-      skiButton.isEnabled = false
     }
 
     if lastActivity == Emoji.ski {
       skiButton.isEnabled = false
-      surfButton.isEnabled = false
-    }
-
-    if lastActivity == Emoji.car {
-      skiButton.isEnabled = true
-      surfButton.isEnabled = true
     }
 
     if beerCount > 3 {
@@ -103,7 +96,6 @@ class NormalViewController: UIViewController {
       skiButton.isEnabled = false
       carButton.isEnabled = false
     }
-
   }
 
   private func resetButtons() {
