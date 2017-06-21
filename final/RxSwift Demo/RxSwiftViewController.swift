@@ -36,6 +36,7 @@ class RxSwiftViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     printObservables()
+    style()
 
 
     /// We will use these below so it makes it easy to have them handy.
@@ -140,5 +141,14 @@ extension RxSwiftViewController {
     .disposed(by: bag)
 
 
+  }
+}
+
+extension RxSwiftViewController {
+  func style() {
+    skiButton.setTitle("X", for: .disabled)
+    surfButton.setTitle("X", for: .disabled)
+    beerButton.setTitle("X", for: .disabled)
+    carButton.setTitle("X", for: .disabled)
   }
 }
