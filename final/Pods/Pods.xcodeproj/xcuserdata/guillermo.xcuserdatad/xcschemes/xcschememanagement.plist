@@ -9,12 +9,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-RxSwift DemoTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>RxCocoa.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>RxSwift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RxTest.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,7 +42,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>5680635A9952B6054D85DDA9A5010C5D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>624F3300607128F243CDC83BD47332FE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FC2E6327E516584468DD3FD6BF5B4EA9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
