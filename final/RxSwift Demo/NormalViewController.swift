@@ -47,6 +47,7 @@ class NormalViewController: UIViewController {
   // MARK: Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
+    style()
     activityTableView.dataSource = self
     activityTableView.delegate = self
   }
@@ -139,4 +140,13 @@ extension NormalViewController: UITableViewDataSource {
 
 extension NormalViewController: UITableViewDelegate {
 
+}
+
+extension NormalViewController {
+  func style() {
+    skiButton.setTitle("X", for: .disabled)
+    surfButton.setTitle("X", for: .disabled)
+    beerButton.setTitle("X", for: .disabled)
+    carButton.setTitle("X", for: .disabled)
+  }
 }

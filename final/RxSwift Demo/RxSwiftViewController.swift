@@ -10,6 +10,7 @@ import RxCocoa
 // Can't consecutively surf twice (disable)
 // Can't consecutively ski twice (disable)
 // Can only do 5 activities (hide)
+typealias Activity = String
 
 class RxSwiftViewController: UIViewController {
   fileprivate let bag = DisposeBag()
@@ -22,44 +23,22 @@ class RxSwiftViewController: UIViewController {
   @IBOutlet weak var activityTableView: UITableView!
 
   // MARK: Private Observables
-  fileprivate var _activities = Variable<[String]>([])
-  var activities: Observable<[String]> {
-    return _activities.asObservable()
-  }
 
-  var beerCount: Observable<Int> {
-    return activities.map { activities -> Int in
-      return activities.filter { $0 == Emoji.beer }.count
-    }
-  }
+  var viewModel = RxSwiftViewModel()
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    printObservables()
-
+    style()
 
     /// We will use these below so it makes it easy to have them handy.
-    let lastActivity = activities.map { $0.last }
-    let firstActivity = activities.map { $0.first }
-    let activityCount = activities.map { $0.count }
+
     // MARK: Button Bindings
 
     // Ski ⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷⛷
 
-    // isHidden: Hide when we have 5 activities or 4 beers.
+    viewModel.skiButtonIsHidden.drive(skiButton.rx.isHidden).disposed(by: bag)
 
-    Observable
-      .combineLatest(activityCount, beerCount ) { $0 >= 5 && $1 >= 4 }
-      .bind(to: skiButton.rx.isHidden)
-      .disposed(by: bag)
-
-    
-    // isEnabled: Enable when the last activity is not skiing or surfing.
-
-    Observable.combineLatest(lastActivity, firstActivity)
-      { $1 != Emoji.beer || $0 != Emoji.surf && $0 != Emoji.ski || $0 == Emoji.car }
-      .bind(to: skiButton.rx.isEnabled)
-      .disposed(by: bag)
+    viewModel.skiButtonIsEnabled.drive(skiButton.rx.isEnabled).disposed(by: bag)
 
     // Surf 🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄🏄
 
@@ -69,8 +48,8 @@ class RxSwiftViewController: UIViewController {
     // isEnabled: Enable when last activity is not skiing or surfing
 
     // Beer 🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺
+    viewModel.beerButtonIsHidden.drive(beerButton.rx.isHidden)
 
-    // isHidden: Hide when we drink 4 beers or 5 activities
 
 
     // isEnabled: -------------
@@ -85,7 +64,7 @@ class RxSwiftViewController: UIViewController {
     setupActions()
 
     // MARK: TableView Binding
-    activities
+    viewModel.activities
       .bind(to: activityTableView.rx.items(cellIdentifier: "activityCell")) { index, model, cell in
         cell.textLabel?.text = model
       }
@@ -99,46 +78,42 @@ extension RxSwiftViewController {
 
     skiButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self._activities.value.append(Emoji.ski)
+        self.viewModel.activityButtonPressed(activity: Emoji.ski)
       })
       .disposed(by: bag)
 
     surfButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self._activities.value.append(Emoji.surf)
+        self.viewModel.activityButtonPressed(activity: Emoji.surf)
       })
       .disposed(by: bag)
 
     beerButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self._activities.value.append(Emoji.beer)
+        self.viewModel.activityButtonPressed(activity: Emoji.beer)
       })
       .disposed(by: bag)
 
     carButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self._activities.value.append(Emoji.car)
+        self.viewModel.activityButtonPressed(activity: Emoji.car)
       })
       .disposed(by: bag)
 
     clearButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self._activities.value.removeAll()
+        self.viewModel.clearButtonPressed()
       })
       .disposed(by: bag)
 
   }
 }
 
-// MARK: Debug
 extension RxSwiftViewController {
-  func printObservables() {
-
-    beerCount.subscribe(onNext: {
-      print("beer count changed to \($0)")
-    })
-    .disposed(by: bag)
-
-
+  func style() {
+    skiButton.setTitle("X", for: .disabled)
+    surfButton.setTitle("X", for: .disabled)
+    beerButton.setTitle("X", for: .disabled)
+    carButton.setTitle("X", for: .disabled)
   }
 }
