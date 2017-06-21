@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="dw7-JA-NEi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="dw7-JA-NEi">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -86,10 +86,10 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="activityCell" id="jzn-HQ-SFs">
-                                                <rect key="frame" x="0.0" y="28" width="343" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="110" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jzn-HQ-SFs" id="MM7-8N-vaw">
-                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="44"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -109,7 +109,7 @@
                             <constraint firstAttribute="leadingMargin" secondItem="lvX-u7-zZV" secondAttribute="leading" id="wfd-Ml-bSr"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="RxSwift" id="e6B-2W-Kic"/>
+                    <tabBarItem key="tabBarItem" title="RxSwift" image="rxswift" selectedImage="rxswift" id="e6B-2W-Kic"/>
                     <connections>
                         <outlet property="activityTableView" destination="v8z-kw-x6q" id="anZ-AO-ZuU"/>
                         <outlet property="beerButton" destination="HWV-o5-yX2" id="xLu-uo-OZ1"/>
@@ -121,9 +121,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x1V-9z-5Mh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-404" y="451"/>
+            <point key="canvasLocation" x="-404" y="450.22488755622192"/>
         </scene>
-        <!--Normal-->
+        <!--Traditional-->
         <scene sceneID="KEJ-Z3-NWl">
             <objects>
                 <viewController id="JN4-Qv-x4W" customClass="NormalViewController" customModule="RxSwift_Demo" customModuleProvider="target" sceneMemberID="viewController">
@@ -222,7 +222,7 @@
                             <constraint firstItem="oaW-RN-UPG" firstAttribute="top" secondItem="f5L-0y-Pi9" secondAttribute="bottom" id="zIZ-VD-dPw"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Normal" id="kvd-UG-kwu"/>
+                    <tabBarItem key="tabBarItem" title="Traditional" id="kvd-UG-kwu"/>
                     <connections>
                         <outlet property="activityTableView" destination="lSt-q3-Qxt" id="OT1-Zf-3A0"/>
                         <outlet property="beerButton" destination="r61-oU-Dym" id="SZv-Kz-uaT"/>
@@ -254,4 +254,7 @@
             <point key="canvasLocation" x="-1356" y="124"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="rxswift" width="25" height="25"/>
+    </resources>
 </document>
