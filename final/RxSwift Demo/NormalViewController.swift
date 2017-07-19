@@ -10,13 +10,6 @@ import UIKit
 // Can only do 5 activities (hide)
 
 //NEW RULE: If you start the day with a beer, can't do anything else besides drink beer. (disable)
-struct Emoji {
-  static let beer = "🍺"
-  static let surf = "🏄"
-  static let ski = "⛷"
-  static let car = "🚗"
-}
-
 class NormalViewController: UIViewController {
 
   // MARK: Outlets
@@ -34,15 +27,16 @@ class NormalViewController: UIViewController {
   }
 
   @IBAction func activityButtonPressed(_ sender: UIButton) {
-    guard let activity = sender.titleLabel?.text else { return }
-
+    guard let activityValue = sender.titleLabel?.text else { return }
+    guard let activity = Activity(rawValue: activityValue) else { return }
+    
     appendActivity(activity)
 
     updateButtonState()
   }
 
   // MARK: Model
-  var activities: [String] = []
+  var activities: [Activity] = []
 
   // MARK: Lifecycle
   override func viewDidLoad() {
@@ -53,7 +47,7 @@ class NormalViewController: UIViewController {
   }
 
   // MARK: Private methods
-  private func appendActivity(_ activity: String) {
+  private func appendActivity(_ activity: Activity) {
     activities.append(activity)
     activityTableView.reloadData()
   }
@@ -62,7 +56,7 @@ class NormalViewController: UIViewController {
   private func updateButtonState() {
     let activityCount = activities.count
 
-    let beerCount = activities.filter { $0 == Emoji.beer }.count
+    let beerCount = activities.filter { $0 == .beer }.count
 
     if beerCount > 1 { carButton.isHidden = true }
 
@@ -73,17 +67,17 @@ class NormalViewController: UIViewController {
     guard let lastActivity = activities.last else { return }
     guard let firstActivity = activities.first else { return }
 
-    if lastActivity == Emoji.surf {
+    if lastActivity == .surf {
       surfButton.isEnabled = false
       skiButton.isEnabled = false
     }
 
-    if lastActivity == Emoji.ski {
+    if lastActivity == .ski {
       skiButton.isEnabled = false
       surfButton.isEnabled = false
     }
 
-    if lastActivity == Emoji.car {
+    if lastActivity == .car {
       skiButton.isEnabled = true
       surfButton.isEnabled = true
     }
@@ -99,7 +93,7 @@ class NormalViewController: UIViewController {
       carButton.isEnabled = false
     }
 
-    if firstActivity == Emoji.beer {
+    if firstActivity == .beer {
       surfButton.isEnabled = false
       skiButton.isEnabled = false
       carButton.isEnabled = false
@@ -127,7 +121,7 @@ extension NormalViewController: UITableViewDataSource {
 
     let activity = activities[indexPath.row]
 
-    cell.textLabel?.text = activity
+    cell.textLabel?.text = activity.rawValue
 
     return cell
   }

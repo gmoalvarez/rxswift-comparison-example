@@ -20,11 +20,11 @@ class RxSwiftViewModel_spec: XCTestCase {
     let skiButtonIsHiddenBefore = try! viewModel.skiButtonIsHidden.asObservable().toBlocking().first()!
     XCTAssert(skiButtonIsHiddenBefore == false)
 
-    viewModel.activityButtonPressed(activity: Emoji.surf)
-    viewModel.activityButtonPressed(activity: Emoji.car)
-    viewModel.activityButtonPressed(activity: Emoji.car)
-    viewModel.activityButtonPressed(activity: Emoji.beer)
-    viewModel.activityButtonPressed(activity: Emoji.beer)
+    viewModel.activityButtonPressed(activity: .surf)
+    viewModel.activityButtonPressed(activity: .car)
+    viewModel.activityButtonPressed(activity: .car)
+    viewModel.activityButtonPressed(activity: .beer)
+    viewModel.activityButtonPressed(activity: .beer)
 
     let skiButtonIsHiddenAfter = try! viewModel.skiButtonIsHidden.asObservable().toBlocking().first()!
     XCTAssert(skiButtonIsHiddenAfter == true)
@@ -34,10 +34,10 @@ class RxSwiftViewModel_spec: XCTestCase {
     let skiButtonIsHiddenBefore = try! viewModel.skiButtonIsHidden.asObservable().toBlocking().first()!
     XCTAssert(skiButtonIsHiddenBefore == false)
 
-    viewModel.activityButtonPressed(activity: Emoji.beer)
-    viewModel.activityButtonPressed(activity: Emoji.beer)
-    viewModel.activityButtonPressed(activity: Emoji.beer)
-    viewModel.activityButtonPressed(activity: Emoji.beer)
+    viewModel.activityButtonPressed(activity: .beer)
+    viewModel.activityButtonPressed(activity: .beer)
+    viewModel.activityButtonPressed(activity: .beer)
+    viewModel.activityButtonPressed(activity: .beer)
 
     let skiButtonIsHiddenAfter = try! viewModel.skiButtonIsHidden.asObservable().toBlocking().first()!
     XCTAssert(skiButtonIsHiddenAfter == true)

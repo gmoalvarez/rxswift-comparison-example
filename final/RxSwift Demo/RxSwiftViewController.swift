@@ -10,7 +10,12 @@ import RxCocoa
 // Can't consecutively surf twice (disable)
 // Can't consecutively ski twice (disable)
 // Can only do 5 activities (hide)
-typealias Activity = String
+enum Activity: String {
+  case beer = "🍺"
+  case surf = "🏄"
+  case ski = "⛷"
+  case car = "🚗"
+}
 
 class RxSwiftViewController: UIViewController {
   fileprivate let bag = DisposeBag()
@@ -48,9 +53,7 @@ class RxSwiftViewController: UIViewController {
     // isEnabled: Enable when last activity is not skiing or surfing
 
     // Beer 🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺
-    viewModel.beerButtonIsHidden.drive(beerButton.rx.isHidden)
-
-
+    viewModel.beerButtonIsHidden.drive(beerButton.rx.isHidden).disposed(by: bag)
 
     // isEnabled: -------------
 
@@ -66,7 +69,7 @@ class RxSwiftViewController: UIViewController {
     // MARK: TableView Binding
     viewModel.activities
       .bind(to: activityTableView.rx.items(cellIdentifier: "activityCell")) { index, model, cell in
-        cell.textLabel?.text = model
+        cell.textLabel?.text = model.rawValue
       }
       .disposed(by: bag)
   }
@@ -78,25 +81,25 @@ extension RxSwiftViewController {
 
     skiButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self.viewModel.activityButtonPressed(activity: Emoji.ski)
+        self.viewModel.activityButtonPressed(activity: .ski)
       })
       .disposed(by: bag)
 
     surfButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self.viewModel.activityButtonPressed(activity: Emoji.surf)
+        self.viewModel.activityButtonPressed(activity: .surf)
       })
       .disposed(by: bag)
 
     beerButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self.viewModel.activityButtonPressed(activity: Emoji.beer)
+        self.viewModel.activityButtonPressed(activity: .beer)
       })
       .disposed(by: bag)
 
     carButton.rx.tap
       .subscribe(onNext: { [unowned self] _ in
-        self.viewModel.activityButtonPressed(activity: Emoji.car)
+        self.viewModel.activityButtonPressed(activity: .car)
       })
       .disposed(by: bag)
 

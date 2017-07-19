@@ -35,7 +35,7 @@ class RxSwiftViewModel {
   // isEnabled: Enable when the last activity is not skiing or surfing.
   var skiButtonIsEnabled: Driver<Bool> {
     return Observable.combineLatest(lastActivity, firstActivity)
-    { $1 != Emoji.beer || $0 != Emoji.surf && $0 != Emoji.ski || $0 == Emoji.car }
+    { $1 != .beer || $0 != .surf && $0 != .ski || $0 == .car }
       .asDriver(onErrorJustReturn: false)
   }
 
@@ -55,7 +55,7 @@ class RxSwiftViewModel {
 
   private var beerCount: Observable<Int> {
     return activities.map { activities -> Int in
-      return activities.filter { $0 == Emoji.beer }.count
+      return activities.filter { $0 == .beer }.count
     }
   }
 
